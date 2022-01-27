@@ -51,7 +51,8 @@ export default function Error404() {
 
         <Box as="form"></Box>
         <Button
-          type="submit"
+          type="button"
+          onClick={() => (window.location.href = "/")}
           label="Voltar à página inicial"
           buttonColors={{
             contrastColor: appConfig.theme.colors.neutrals["000"],
@@ -62,9 +63,6 @@ export default function Error404() {
           styleSheet={{
             borderRadius: "100px",
             marginTop: "16px",
-          }}
-          onClick={function () {
-            window.history.back();
           }}
         />
       </Box>
