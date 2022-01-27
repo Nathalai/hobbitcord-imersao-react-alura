@@ -1,39 +1,9 @@
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
+import React from "react";
+import { useRouter } from "next/router";
 import appConfig from "../config.json";
 
-function GlobalStyle() {
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: "Open Sans", sans-serif;
-      }
-      /* App fit Height */
-      html,
-      body,
-      #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */
-    `}</style>
-  );
-}
-
 function Title(props) {
-  console.log(props);
   const Tag = props.tag || "h1";
   return (
     <>
@@ -53,7 +23,7 @@ function Title(props) {
 //   return (
 //     <div>
 //       <GlobalStyle />
-//       <Title tag="h2">Boas vindas de volta! Como foi a joranada?</Title>
+//       <Title tag="h2">Boas vindas de volta!</Title>
 //       <h2>Discord - Alura Matrix</h2>
 //     </div>
 //   );
@@ -61,18 +31,20 @@ function Title(props) {
 
 // export default HomePage;
 
-export default function PaginaInicial() {
-  const username = "Nathalai";
+export default function HomePage() {
+  //const username = "Nathalai";
+  const [username, setUsername] = React.useState("Nathalai");
+  const routing = useRouter();
+  const image = "";
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          //backgroundColor: appConfig.theme.colors.primary[500],
+          //backgroundColor: appConfig.theme.colors.neutrals[200],
           backgroundImage:
             "url(https://virtualbackgrounds.site/wp-content/uploads/2020/07/the-lord-of-the-rings-hobbit-house-entrance.jpg)",
           backgroundRepeat: "no-repeat",
@@ -101,6 +73,16 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (eventInfos) {
+              eventInfos.preventDefault();
+              //console.log("Alguém submeteu o form");
+              //window.location.href = "/chat"; //desta forma, demora para carregar a página do chat
+              if (username.length <= 2) {
+                routing.push("/404");
+              } else {
+                routing.push("/chat");
+              }
+            }}
             styleSheet={{
               display: "flex",
               flexDirection: "column",
@@ -122,7 +104,25 @@ export default function PaginaInicial() {
               {appConfig.name}
             </Text>
 
+            {/* <input
+              type="text"
+              value={username}
+              onChange={function handler(event) {
+                console.log("usuário digitou", event.target.value);
+                // onde está o valor digitado pelo usuário?
+                const newValue = event.target.value;
+                // atualizar o o valor da variável username pelo que está sendo digitado
+                // usando React e avisando quem precisa:
+                setUsername(newValue);
+              }}
+            /> */}
             <TextField
+              value={username}
+              onChange={function handler(eventInfos) {
+                //console.log("usuário digitou", event.target.value);
+                const newValue = eventInfos.target.value;
+                setUsername(newValue);
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -136,6 +136,7 @@ export default function PaginaInicial() {
                 borderRadius: "100px",
               }}
             />
+
             <Button
               type="submit"
               label="Entrar"
@@ -174,8 +175,13 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={`https://github.com/${username}.png`}
+              src={
+                username.length > 2
+                  ? `https://github.com/${username}.png`
+                  : image
+              }
             />
+
             <Text
               variant="body4"
               styleSheet={{
