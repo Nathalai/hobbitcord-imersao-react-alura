@@ -11,7 +11,7 @@ export default function Error404() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: appConfig.theme.colors.neutrals[200],
+          backgroundColor: appConfig.theme.colors.neutrals[900],
           backgroundSize: "cover",
           backgroundBlendMode: "multiply",
         }}
@@ -26,27 +26,29 @@ export default function Error404() {
         <Text
           variant="body1"
           styleSheet={{
-            color: appConfig.theme.colors.neutrals[900],
+            color: appConfig.theme.colors.neutrals[200],
             //backgroundColor: appConfig.theme.colors.neutrals[500],
             fontSize: "24px",
             padding: "8px 10px",
+            marginBottom: "20px",
             //borderRadius: "8px",
           }}
         >
-          {"Parece que você está perdido..."}
+          {'"I have no memory of this place" - Gandalf, o Cinzento'}
         </Text>
 
         <Text
           variant="body2
           "
           styleSheet={{
-            color: appConfig.theme.colors.neutrals[900],
+            color: appConfig.theme.colors.neutrals[200],
             //backgroundColor: appConfig.theme.colors.neutrals[500],
+            fontSize: "20px",
             padding: "8px 10px",
             //borderRadius: "8px",
           }}
         >
-          {"A página que você está procurando não foi encontrada"}
+          {"Parece que você está perdido..."}
         </Text>
 
         <Box as="form"></Box>
