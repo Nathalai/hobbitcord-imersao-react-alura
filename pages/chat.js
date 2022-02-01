@@ -188,6 +188,9 @@ function MessageList(props) {
             <Box
               styleSheet={{
                 marginBottom: "8px",
+                display: "flex",
+                flexDirection: "inline",
+                alignItems: "center",
               }}
             >
               <Image
