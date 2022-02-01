@@ -10,5 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^1.29.4"
   }
 }
