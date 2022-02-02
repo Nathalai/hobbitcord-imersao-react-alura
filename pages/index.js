@@ -33,9 +33,10 @@ function Title(props) {
 
 export default function HomePage() {
   //const username = "Nathalai";
-  const [username, setUsername] = React.useState("Nathalai");
+  const [username, setUsername] = React.useState("");
   const routing = useRouter();
-  const image = "";
+  const image =
+    "https://www.clipartmax.com/png/full/242-2421817_frodo-cartoon.png";
 
   return (
     <>
@@ -80,7 +81,7 @@ export default function HomePage() {
               if (username.length <= 2) {
                 routing.push("/404");
               } else {
-                routing.push("/chat");
+                routing.push(`/chat?username=${username}`);
               }
             }}
             styleSheet={{
@@ -117,6 +118,7 @@ export default function HomePage() {
               }}
             /> */}
             <TextField
+              placeholder="Digite seu username do GitHub"
               value={username}
               onChange={function handler(eventInfos) {
                 //console.log("usuário digitou", event.target.value);
