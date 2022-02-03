@@ -3,13 +3,21 @@ import React from "react";
 import appConfig from "../config.json";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
+import { ButtonSendSticker } from "../src/components/ButtonSendSticker";
 
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzY1OTY5NSwiZXhwIjoxOTU5MjM1Njk1fQ.X5yOThQQb7J-LYGfrakfDqGvL2zlDlUZSS8yjyMc-Rk";
 const SUPABASE_URL = "https://mvqqinfaudikutijoljq.supabase.co";
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-//const supabaseData =
+function listenMessagesInRealTime(addMessages) {
+  return supabaseClient
+    .from("messages")
+    .on("INSERT", (liveMessage) => {
+      addMessages(liveMessage.new);
+    })
+    .subscribe();
+}
 
 export default function ChatPage() {
   const routing = useRouter();
@@ -23,9 +31,15 @@ export default function ChatPage() {
       .select("*")
       .order("id", { ascending: false })
       .then(({ data }) => {
-        console.log("Dados da consulta: ", data);
+        //console.log("Dados da consulta: ", data);
         setMessageList(data);
       });
+
+    listenMessagesInRealTime((newMessage) => {
+      setMessageList((currentListValue) => {
+        return [newMessage, ...currentListValue];
+      });
+    });
   }, []);
 
   function handleNewMessage(newMessage) {
@@ -39,8 +53,8 @@ export default function ChatPage() {
       .from("messages")
       .insert([message])
       .then(({ data }) => {
-        console.log("Criando mensagem: ", data);
-        setMessageList([data[0], ...messageList]);
+        //console.log("Criando mensagem: ", data);
+        //setMessageList([data[0], ...messageList]);
       });
 
     setMessage("");
@@ -129,6 +143,15 @@ export default function ChatPage() {
                 color: appConfig.theme.colors.neutrals[200],
               }}
             />
+            <ButtonSendSticker
+              onStickerClick={(sticker) => {
+                // console.log(
+                //   "[ USANDO O COMPONENTE] salva este sticker no banco",
+                //   sticker
+                // );
+                handleNewMessage(`:sticker: ${sticker}`);
+              }}
+            />
           </Box>
         </Box>
       </Box>
@@ -161,7 +184,7 @@ function Header() {
 }
 
 function MessageList(props) {
-  console.log(props.messages);
+  //console.log(props.messages);
   return (
     <Box
       tag="ul"
@@ -218,7 +241,12 @@ function MessageList(props) {
                 {new Date().toLocaleDateString()}
               </Text>
             </Box>
-            {message.text}
+            {message.text.startsWith(":sticker:") ? (
+              <Image src={message.text.replace(":sticker:", "")} />
+            ) : (
+              message.text
+            )}
+            {/* {(message.text)}; */}
           </Text>
         );
       })}
